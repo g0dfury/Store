@@ -1,25 +1,6 @@
 Обзор проекта
 Добро пожаловать в наш проект на Django и Django Rest Framework (DRF)! Этот репозиторий служит основой для создания веб-приложения с использованием веб-фреймворка Django и расширения его возможностей с помощью Django Rest Framework для разработки API.
 
-store-project/
-│
-├── api/
-│   ├── migrations/
-│   ├── static/
-│   ├── templates/
-│   ├── __init__.py
-│   ├── admin.py
-│   ├── apps.py
-│   ├── models.py
-│   ├── tests.py
-│   ├── views.py
-│   └── urls.py
-│
-├── .gitignore
-├── manage.py
-├── README.md
-└── requirements.txt
-
 ## Начало
 
 1. git clone https://github.com/ваше-имя-пользователя/ваш-репо.git
