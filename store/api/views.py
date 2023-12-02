@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from .models import Category, Product, Review, Cart, CartItem, Order, OrderItem
 from .serializers import (
     CategorySerializer, ProductSerializer, ReviewSerializer,
-    CartSerializer, OrderSerializer
+    CartSerializer, OrderSerializer,
 )
 
 
@@ -26,6 +26,14 @@ class ProductList(generics.ListCreateAPIView):  # отобразить и соз
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView): # достать обновить удалить продукт
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+class ProductByCategoryList(generics.ListAPIView):
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        category_id = self.kwargs['category_id']
+        return Product.objects.filter(category_id=category_id)
+    
 
 # Обзоры
 
