@@ -7,7 +7,7 @@ from .serializers import (
 )
 
 
-# Категории:
+# Категории: +
 
 class CategoryList(generics.ListCreateAPIView): # отображение + создание категории
     queryset = Category.objects.all()
@@ -17,7 +17,7 @@ class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):    # достать
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-# Товары 
+# Товары +
 
 class ProductList(generics.ListCreateAPIView):  # отобразить и создать продукт
     queryset = Product.objects.all()
@@ -69,7 +69,7 @@ class OrderDetail(generics.RetrieveUpdateDestroyAPIView):  # достать об
     serializer_class = OrderSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-# Поиск
+# Поиск +
 class ProductSearchView(generics.ListAPIView):   
     queryset = Product.objects.all()
     serializer_class = ProductSerializer

@@ -8,6 +8,7 @@ class CategoryAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'category', 'price', 'quantity_available')
     search_fields = ('name', 'category__name')  # добавлен поиск по категории
+    list_filter = ('id', 'category', 'price', ) # фильтрация товаров
 
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('id', 'product', 'user', 'text', 'rating')

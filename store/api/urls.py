@@ -16,10 +16,10 @@ urlpatterns = [
     
     path('products/', ProductList.as_view(), name='product-list-create'), # отображать GET / создать POST
     path('products/<int:pk>/', ProductDetail.as_view(), name='product-detail'), # достать продукт GET / обновить PATCH / удалить DELETE
-    path('products/search/', ProductSearchView.as_view(), name='product-search'),
+    path('products/search/', ProductSearchView.as_view(), name='product-search'), # поиск товаров через query = value
     
-    path('reviews/', ReviewList.as_view(), name='review-list'), # -
-    path('reviews/<int:pk>/', ReviewDetail.as_view(), name='review-detail'), # -
+    path('reviews/', ReviewList.as_view(), name='review-list'), # создает и отображает обзоры
+    path('reviews/<int:pk>/', ReviewDetail.as_view(), name='review-detail'), # достать редактирвоать удалить
     
     path('carts/', CartList.as_view(), name='cart-list'), # -
     path('carts/<int:pk>/', CartDetail.as_view(), name='cart-detail'), # -
@@ -27,5 +27,4 @@ urlpatterns = [
     path('orders/', OrderList.as_view(), name='order-list'), # - 
     path('orders/<int:pk>/', OrderDetail.as_view(), name='order-detail'), # -
     path('orders/history/', OrderHistoryView.as_view(), name='order-history'), # -
-
 ]
