@@ -35,7 +35,7 @@ class ProductByCategoryList(generics.ListAPIView):
         return Product.objects.filter(category_id=category_id)
     
 
-# Обзоры
+# Обзоры +
 
 class ReviewList(generics.ListCreateAPIView):  # отобразить создать обзор
     queryset = Review.objects.all()

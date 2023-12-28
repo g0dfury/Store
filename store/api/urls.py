@@ -24,7 +24,7 @@ urlpatterns = [
     path('carts/', CartList.as_view(), name='cart-list'), # -
     path('carts/<int:pk>/', CartDetail.as_view(), name='cart-detail'), # -
     
-    path('orders/', OrderList.as_view(), name='order-list'), # - 
-    path('orders/<int:pk>/', OrderDetail.as_view(), name='order-detail'), # -
-    path('orders/history/', OrderHistoryView.as_view(), name='order-history'), # -
+    path('orders/', OrderList.as_view(), name='order-list'), # создание заказа (demo)
+    path('orders/<int:pk>/', OrderDetail.as_view(), name='order-detail'), # детали заказа с конкретным id
+    path('orders/history/', OrderHistoryView.as_view(), name='order-history'), # отображает историю заказов
 ]
