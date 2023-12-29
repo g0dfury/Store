@@ -10,27 +10,15 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name', 'category__name')  # добавлен поиск по категории
     list_filter = ('id', 'category', 'price', ) # фильтрация товаров
 
-class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('id', 'product', 'user', 'text', 'rating')
-
 class CartAdmin(admin.ModelAdmin):
     list_display = ('id', 'user')
 
 class CartItemAdmin(admin.ModelAdmin):
     list_display = ('id', 'product', 'cart', 'quantity')
+    list_filter = ('cart', )
 
-class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'total_price', 'shipping_address', 'date_ordered', 'is_paid')
-
-
-class OrderItemAdmin(admin.ModelAdmin):
-    list_display = ('id', 'product', 'order', 'quantity')
-   
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
-admin.site.register(Review, ReviewAdmin)
 admin.site.register(Cart, CartAdmin)
 admin.site.register(CartItem, CartItemAdmin)
-admin.site.register(Order, OrderAdmin)
-admin.site.register(OrderItem, OrderItemAdmin)   
