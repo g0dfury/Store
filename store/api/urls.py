@@ -15,4 +15,11 @@ urlpatterns = [
 
     path('carts/', CartCreate.as_view(), name='cart-list'), # пустая корзина
     path('carts/<int:cart_id>/add/', CartList.as_view(), name='add-to-cart'), # заполнение корзины
+
+    path('users/profile/', UserProfileView.as_view(), name='user-profile'), # изменение информации, удаление и получение только для авторизированного пользователя
+    
+    path('admin/products/', ProductAdminListCreateView.as_view(), name='product-admin-list-create'), # создать посмотреть продукты (для админа)
+    path('admin/products/<int:pk>/', ProductAdminDetailView.as_view(), name='product-admin-detail'), # обновить удалить получить по id (для админа)
+    path('admin/users/delete/<int:pk>/', UserAdminDeleteView.as_view(), name='user-admin-delete'), # удалить профиль (для админа)
 ]
+

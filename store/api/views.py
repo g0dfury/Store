@@ -89,4 +89,31 @@ class CartList(generics.CreateAPIView):
             return Response({'success': False, 'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
 
+# Управление профилем пользователя(auth): 
 
+class UserProfileView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = UserProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+    
+# Управление товарами (admin):
+class ProductAdminListCreateView(generics.ListCreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductAdminSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+class ProductAdminDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductAdminSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+# Управление аккаунтами (admin):
+class UserAdminDeleteView(generics.DestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserAdminDeleteSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+    def perform_destroy(self, instance):
+        instance.delete()
