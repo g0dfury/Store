@@ -14,7 +14,7 @@ class CartAdmin(admin.ModelAdmin):
     list_display = ('id', 'user')
 
 class CartItemAdmin(admin.ModelAdmin):
-    list_display = ('id', 'product', 'cart', 'quantity')
+    list_display = ('id','cart', 'quantity', 'product')
     list_filter = ('cart', )
 
 

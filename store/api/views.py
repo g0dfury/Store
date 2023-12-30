@@ -1,5 +1,6 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from .models import *
 from .serializers import *
@@ -87,7 +88,5 @@ class CartList(generics.CreateAPIView):
         except Exception as e:
             return Response({'success': False, 'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
-class CartDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Cart.objects.all()
-    serializer_class = CartSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+
+

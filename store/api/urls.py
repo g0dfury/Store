@@ -13,7 +13,6 @@ urlpatterns = [
     path('products/<int:pk>/', ProductDetail.as_view(), name='product-detail'), # достать продукт GET / обновить PATCH / удалить DELETE
     path('products/search/', ProductSearchView.as_view(), name='product-search'), # поиск товаров через query = value
 
-    path('carts/', CartCreate.as_view(), name='cart-list'), # -
-    path('carts/<int:pk>/', CartDetail.as_view(), name='cart-detail'), # -
-    path('carts/<int:cart_id>/add/', CartList.as_view(), name='add-to-cart'),
+    path('carts/', CartCreate.as_view(), name='cart-list'), # пустая корзина
+    path('carts/<int:cart_id>/add/', CartList.as_view(), name='add-to-cart'), # заполнение корзины
 ]
