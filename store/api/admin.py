@@ -17,8 +17,15 @@ class CartItemAdmin(admin.ModelAdmin):
     list_display = ('id','cart', 'quantity', 'product')
     list_filter = ('cart', )
 
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('user', 'total_price', 'shipping_address', 'date_ordered', 'is_paid')
+    
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ('product', 'order', 'quantity')
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Cart, CartAdmin)
 admin.site.register(CartItem, CartItemAdmin)
+admin.site.register(Order, OrderAdmin)
+admin.site.register(OrderItem, OrderItemAdmin)

@@ -45,3 +45,17 @@ class ProductAdminSerializer(serializers.ModelSerializer):
 ### Для удаления аккаунтов (admin)
 class UserAdminDeleteSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
+
+### Оформление заказов
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = ['product', 'quantity']
+
+class OrderSerializer(serializers.ModelSerializer):
+    items = OrderItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Order
+        fields = ['id', 'user', 'items', 'total_price', 'shipping_address', 'date_ordered', 'is_paid']
+        read_only_fields = ['id', 'user', 'total_price', 'date_ordered', 'is_paid']

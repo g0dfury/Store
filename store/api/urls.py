@@ -21,5 +21,8 @@ urlpatterns = [
     path('admin/products/', ProductAdminListCreateView.as_view(), name='product-admin-list-create'), # создать посмотреть продукты (для админа)
     path('admin/products/<int:pk>/', ProductAdminDetailView.as_view(), name='product-admin-detail'), # обновить удалить получить по id (для админа)
     path('admin/users/delete/<int:pk>/', UserAdminDeleteView.as_view(), name='user-admin-delete'), # удалить профиль (для админа)
+
+    path('orders/create/', OrderCreate.as_view(), name='order-create'),
+    path('orders/history/', OrderHistory.as_view(), name='order-history'),
 ]
 

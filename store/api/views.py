@@ -117,3 +117,24 @@ class UserAdminDeleteView(generics.DestroyAPIView):
 
     def perform_destroy(self, instance):
         instance.delete()
+
+# Заказы
+class OrderCreate(generics.CreateAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        cart_items = user.cart.items.all()
+        order = serializer.save(user=user, total_price=0)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class OrderHistory(generics.ListAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Order.objects.filter(user=user)
