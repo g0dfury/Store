@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from .models import *
 from .serializers import *
-
+from rest_framework.permissions import IsAuthenticated
 # Категории: +
 class CategoryList(generics.ListCreateAPIView): # отображение + создание категории
     queryset = Category.objects.all()
@@ -41,52 +41,52 @@ class ProductSearchView(generics.ListAPIView):
 
 # Корзина
 
-class CartCreate(generics.ListCreateAPIView): # создать отобразить корзмну
-    queryset = Cart.objects.all()
-    serializer_class = CartSerializer
-    permission_classes = [permissions.IsAuthenticated]
+# class CartCreate(generics.ListCreateAPIView): # создать отобразить корзмну
+#     queryset = Cart.objects.all()
+#     serializer_class = CartSerializer
+#     permission_classes = [permissions.IsAuthenticated]
     
 
-class CartList(generics.CreateAPIView):
-    queryset = Cart.objects.all()
-    serializer_class = CartSerializer
-    permission_classes = [permissions.IsAuthenticated]
+# class CartList(generics.CreateAPIView):
+#     queryset = Cart.objects.all()
+#     serializer_class = CartSerializer
+#     permission_classes = [permissions.IsAuthenticated]
 
-    def perform_create(self, serializer):
-        user = self.request.user
-        cart_id = self.kwargs.get('cart_id', None)
+#     def perform_create(self, serializer):
+#         user = self.request.user
+#         cart_id = self.kwargs.get('cart_id', None)
         
-        if cart_id:
-            user_cart = Cart.objects.get(pk=cart_id)
-        else:
-            user_cart, created = Cart.objects.get_or_create(user=user)
+#         if cart_id:
+#             user_cart = Cart.objects.get(pk=cart_id)
+#         else:
+#             user_cart, created = Cart.objects.get_or_create(user=user)
 
-        serializer.save(cart=user_cart)
+#         serializer.save(cart=user_cart)
 
-    def create(self, request, *args, **kwargs):
-        data = request.data
-        cart_id = kwargs.get('cart_id', None)
+#     def create(self, request, *args, **kwargs):
+#         data = request.data
+#         cart_id = kwargs.get('cart_id', None)
         
-        if cart_id:
-            user_cart = Cart.objects.get(pk=cart_id)
-        else:
-            user_cart, created = Cart.objects.get_or_create(user=request.user)
+#         if cart_id:
+#             user_cart = Cart.objects.get(pk=cart_id)
+#         else:
+#             user_cart, created = Cart.objects.get_or_create(user=request.user)
 
-        serializer = CartItemSerializer(data=data, many=True, context={'cart': user_cart})
+#         serializer = CartItemSerializer(data=data, many=True, context={'cart': user_cart})
         
-        try:
-            serializer.is_valid(raise_exception=True)
-            serializer.save(cart=user_cart)  # Убедимся, что передаем cart в save()
+#         try:
+#             serializer.is_valid(raise_exception=True)
+#             serializer.save(cart=user_cart)  # Убедимся, что передаем cart в save()
 
-            added_items = serializer.validated_data  # Получаем данные добавленных товаров
-            items_info = [
-                f"{item['product'].name} ({item['quantity']} units)" for item in added_items
-            ]
-            items_message = f"Item(s) added to cart successfully: {', '.join(items_info)}"
+#             added_items = serializer.validated_data  # Получаем данные добавленных товаров
+#             items_info = [
+#                 f"{item['product'].name} ({item['quantity']} units)" for item in added_items
+#             ]
+#             items_message = f"Item(s) added to cart successfully: {', '.join(items_info)}"
 
-            return Response({'success': True, 'message': items_message}, status=status.HTTP_201_CREATED)
-        except Exception as e:
-            return Response({'success': False, 'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+#             return Response({'success': True, 'message': items_message}, status=status.HTTP_201_CREATED)
+#         except Exception as e:
+#             return Response({'success': False, 'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
 
 # Управление профилем пользователя(auth): 
@@ -119,22 +119,80 @@ class UserAdminDeleteView(generics.DestroyAPIView):
         instance.delete()
 
 # Заказы
-class OrderCreate(generics.CreateAPIView):
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
-    permission_classes = [permissions.IsAuthenticated]
+# class OrderCreate(generics.CreateAPIView):
+#     queryset = Order.objects.all()
+#     serializer_class = OrderSerializer
+#     permission_classes = [permissions.IsAuthenticated]
 
-    def perform_create(self, serializer):
-        user = self.request.user
-        cart_items = user.cart.items.all()
-        order = serializer.save(user=user, total_price=0)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+#     def perform_create(self, serializer):
+#         user = self.request.user
+#         cart_items = user.cart.items.all()
+#         order = serializer.save(user=user, total_price=0)
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class OrderHistory(generics.ListAPIView):
-    serializer_class = OrderSerializer
-    permission_classes = [permissions.IsAuthenticated]
+# class OrderHistory(generics.ListAPIView):
+#     serializer_class = OrderSerializer
+#     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        user = self.request.user
-        return Order.objects.filter(user=user)
+#     def get_queryset(self):
+#         user = self.request.user
+#         return Order.objects.filter(user=user)
+        
+class CartView(APIView):
+    permission_classes = (IsAuthenticated, )
+    def get(self , request):
+        user = request.user
+        cart = Cart.objects.filter(user = user, ordered=False).first()
+        queryset = CartItems.objects.filter(cart = cart)
+        serializer = CartItemsSerializer(queryset, many = True)
+        return Response(serializer.data)
+    
+    def post(self , request):
+        data = request.data
+        user = request.user
+        cart,_ = Cart.objects.get_or_create(user = user, ordered = False)
+
+        product = Product.objects.get(id = data.get('product'))
+        price = product.price
+        quantity = data.get('quantity')
+        cart_items = CartItems(cart = cart, user = user, product = product, price = price, quantity = quantity)
+        cart_items.save()
+
+        total_price = 0
+        cart_items = CartItems.objects.filter(user = user, cart = cart.id)
+        for items in cart_items:
+            total_price += items.price
+        cart.total_price = total_price
+        cart.save()
+
+        return Response({'success': 'Items added to your cart'})    
+    
+    def put(self , request):
+        data = request.data
+        cart_item = CartItems.objects.get(id = data.get('id'))
+        quantity = data.get('quantity')
+        cart_item.quantity += quantity
+        cart_item.save()
+        return Response({'success':'Items upload'})
+    
+    def delete(self , request):
+        user = request.user
+        data = request.data
+
+        cart_item = CartItems.objects.get(id = data.get('id'))
+        cart_item.delete()
+
+        cart = Cart.objects.filter(user = user, ordered = False).first()
+        queryset = CartItems.objects.filter(cart = cart)
+        serializer = CartItemsSerializer(queryset, many = True)
+        return Response(serializer.data)
+    
+
+
+class OrderAPI(APIView):
+
+    def get(self, request):
+        queryset = Orders.objects.filter(user = request.user)
+        serializer = OrderSerializer(queryset, many = True)
+        return Response(serializer.data)

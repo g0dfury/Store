@@ -13,8 +13,8 @@ urlpatterns = [
     path('products/<int:pk>/', ProductDetail.as_view(), name='product-detail'), # достать продукт GET / обновить PATCH / удалить DELETE
     path('products/search/', ProductSearchView.as_view(), name='product-search'), # поиск товаров через query = value
 
-    path('carts/', CartCreate.as_view(), name='cart-list'), # пустая корзина
-    path('carts/<int:cart_id>/add/', CartList.as_view(), name='add-to-cart'), # заполнение корзины
+    # path('carts/', CartCreate.as_view(), name='cart-list'), # пустая корзина
+    # path('carts/<int:cart_id>/add/', CartList.as_view(), name='add-to-cart'), # заполнение корзины
 
     path('users/profile/', UserProfileView.as_view(), name='user-profile'), # изменение информации, удаление и получение только для авторизированного пользователя
     
@@ -22,7 +22,10 @@ urlpatterns = [
     path('admin/products/<int:pk>/', ProductAdminDetailView.as_view(), name='product-admin-detail'), # обновить удалить получить по id (для админа)
     path('admin/users/delete/<int:pk>/', UserAdminDeleteView.as_view(), name='user-admin-delete'), # удалить профиль (для админа)
 
-    path('orders/create/', OrderCreate.as_view(), name='order-create'),
-    path('orders/history/', OrderHistory.as_view(), name='order-history'),
+    # path('orders/create/', OrderCreate.as_view(), name='order-create'),
+    # path('orders/history/', OrderHistory.as_view(), name='order-history'),
+
+    path('carts/', CartView.as_view()),
+    path('order/', OrderAPI.as_view())
 ]
 
