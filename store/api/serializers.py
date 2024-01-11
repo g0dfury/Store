@@ -11,17 +11,6 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
-#####
-# class CartItemSerializer(serializers.ModelSerializer):    
-#     class Meta:
-#         model = CartItem
-#         fields = ['id', 'product', 'quantity']
-
-# class CartSerializer(serializers.ModelSerializer):
-#     items = CartItemSerializer(many=True, read_only=True)
-#     class Meta:
-#         model = Cart
-#         fields = '__all__'
 
 ######## Для управления аккаунтом авторизированного user
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -46,19 +35,7 @@ class ProductAdminSerializer(serializers.ModelSerializer):
 class UserAdminDeleteSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
 
-### Оформление заказов
-# class OrderItemSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = OrderItem
-#         fields = ['product', 'quantity']
-
-# class OrderSerializer(serializers.ModelSerializer):
-#     items = OrderItemSerializer(many=True, read_only=True)
-
-#     class Meta:
-#         model = Order
-#         fields = ['id', 'user', 'items', 'total_price', 'shipping_address', 'date_ordered', 'is_paid']
-#         read_only_fields = ['id', 'user', 'total_price', 'date_ordered', 'is_paid']
+### Корзина + заказы
     
 class CartSerializer(serializers.ModelSerializer):
     class Meta:

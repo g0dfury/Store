@@ -23,37 +23,14 @@ class Product(models.Model):
         return self.name
     
 # # cart
-# class Cart(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     items = models.ManyToManyField(Product, through='CartItem')
-
-# class CartItem(models.Model):
-#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-#     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-#     quantity = models.PositiveIntegerField()
-
-
-# # orders
-# class Order(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     items = models.ManyToManyField(Product, through='OrderItem')
-#     total_price = models.DecimalField(max_digits=10, decimal_places=2)
-#     shipping_address = models.TextField()
-#     date_ordered = models.DateTimeField(auto_now_add=True)
-#     is_paid = models.BooleanField(default=False)
-
-# class OrderItem(models.Model):
-#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-#     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-#     quantity = models.PositiveIntegerField()
-
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     ordered = models.BooleanField(default=False)
     total_price = models.FloatField(default=0)
 
     def __str__(self):
-        return str(self.user.username) + " " + str(self.total_price)
+        return f"{str(self.user.id)}. {str(self.user.username)} - {str(self.total_price)}$"
+
          
 
 
@@ -66,7 +43,7 @@ class CartItems(models.Model):
     quantity = models.IntegerField(default=1)
     
     def __str__(self):
-        return str(self.user.username) + "`s cart: " + str(self.product.name)
+        return f"{self.user.username}'s cart: {self.product.name}: {self.quantity} pc(s)."
     
     class Meta:
         verbose_name_plural = "CartItems"
@@ -82,7 +59,8 @@ def correct_price(sender, **kwargs):
     # cart = Cart.objects.get(id = cart_items.cart.id)
     # cart.total_price = cart_items.price
     # cart.save()
-    
+
+# orders   
 class Orders(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     cart = models.ForeignKey(Cart, on_delete = models.CASCADE)

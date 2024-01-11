@@ -25,10 +25,6 @@ class OrderItemAdmin(admin.ModelAdmin):
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
-# admin.site.register(Cart, CartAdmin)
-# admin.site.register(CartItem, CartItemAdmin)
-# admin.site.register(Order, OrderAdmin)
-# admin.site.register(OrderItem, OrderItemAdmin)
 admin.site.register(Cart)
 admin.site.register(CartItems)
 admin.site.register(Orders)
