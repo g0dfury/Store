@@ -11,17 +11,17 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = 'Categories'
 
-# product
+# product    
 class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     quantity_available = models.PositiveIntegerField()
-
     def __str__(self):
         return self.name
     
+
 # # cart
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -55,28 +55,15 @@ def correct_price(sender, **kwargs):
     cart_items = kwargs['instance']
     price_of_product = Product.objects.get(id=cart_items.product.id)
     cart_items.price = cart_items.quantity * float(price_of_product.price)
-    # total_cart_items = CartItems.objects.filter(user = cart_items.user)
-    # cart = Cart.objects.get(id = cart_items.cart.id)
-    # cart.total_price = cart_items.price
-    # cart.save()
 
-# orders   
+
+# orders    
 class Orders(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     cart = models.ForeignKey(Cart, on_delete = models.CASCADE)
     amount = models.FloatField(default = 0)
     is_paid = models.BooleanField(default = False)
-    order_id = models.CharField(max_length = 100, blank = True)
-    payment_id = models.CharField(max_length = 100, blank = True)
-    payment_signature = models.CharField(max_length = 100, blank = True)
+    items = models.CharField(max_length=150, blank=True)
 
     class Meta:
-        verbose_name_plural = "Orders"
-
-
-class OrderedItems(models.Model):
-    user = models.ForeignKey(User, on_delete = models.CASCADE)
-    order = models.ForeignKey(Orders, on_delete = models.CASCADE)
-
-    class Meta:
-        verbose_name_plural = "OrderedItems"
+        verbose_name_plural = 'Orders'

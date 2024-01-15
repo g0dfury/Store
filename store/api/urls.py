@@ -17,10 +17,10 @@ urlpatterns = [
     path('admin/products/', ProductAdminCreateView.as_view(), name='product-admin-create'), # создать товар (админ только)
     path('admin/products/<int:pk>/', ProductAdminDetailView.as_view(), name='product-admin-detail'), # редактирование товара (админ)
     path('admin/users/delete/<int:pk>/', UserAdminDeleteView.as_view(), name='user-admin-delete'), # удаление пользователя (админ)
-    path('admin/categories/create/', CategoryCreate.as_view(), name = 'category-create' ),
-    path('admin/categories/edit/<int:pk>/', CategoryEdit.as_view(), name = 'category-edit'),
+    path('admin/categories/create/', CategoryCreate.as_view(), name = 'category-create' ), # админ создает категорию
+    path('admin/categories/edit/<int:pk>/', CategoryEdit.as_view(), name = 'category-edit'), # админ категория detail
 
-    path('carts/', CartView.as_view()),
-    path('order/', OrderAPI.as_view())
+    path('carts/', CartView.as_view()), # создать корзину и проверить наличие
+    path('cart-to-order/', CartToOrderView.as_view(), name='cart-to-order-view'), # создание и получение заказа (удаляет корзину)
 ]
 
