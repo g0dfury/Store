@@ -109,14 +109,6 @@ class CartView(APIView):
 
         return Response({'success': 'Items added to your cart'})    
     
-    def put(self , request):
-        data = request.data
-        cart_item = CartItems.objects.get(id = data.get('id'))
-        quantity = data.get('quantity')
-        cart_item.quantity += quantity
-        cart_item.save()
-        return Response({'success':'Items upload'})
-    
     def delete(self , request):
         user = request.user
         data = request.data
