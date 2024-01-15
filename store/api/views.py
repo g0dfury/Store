@@ -5,7 +5,9 @@ from django.contrib.auth.models import User
 from .models import *
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated
-# Категории: +
+
+
+# category
 class CategoryList(generics.ListAPIView): # отображение 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -24,7 +26,7 @@ class CategoryEdit(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAdminUser]  # обновить удалить получить (админ)
 
-# Товары +
+# products
 class ProductList(generics.ListAPIView):  # отобразить и создать продукт
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -40,7 +42,7 @@ class ProductByCategoryList(generics.ListAPIView):
         category_id = self.kwargs['category_id']
         return Product.objects.filter(category_id=category_id)
     
-# Управление товарами (admin):
+# products detail (admin)
 class ProductAdminCreateView(generics.CreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductAdminSerializer
@@ -51,7 +53,7 @@ class ProductAdminDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductAdminSerializer
     permission_classes = [permissions.IsAdminUser]
     
-# Поиск +
+# search
 class ProductSearchView(generics.ListAPIView):   
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -60,7 +62,7 @@ class ProductSearchView(generics.ListAPIView):
         query = self.request.GET.get('query', '')
         return Product.objects.filter(name__icontains=query)
 
-# Управление профилем пользователя(auth): 
+# user details (auth)
 
 class UserProfileView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserProfileSerializer
@@ -69,8 +71,15 @@ class UserProfileView(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         return self.request.user
 
-# Управление аккаунтами (admin):
-class UserAdminDeleteView(generics.DestroyAPIView):
+# profiles (admin)
+class UserListView(APIView):    # list of users for admin
+    permission_classes = [permissions.IsAdminUser]
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)    
+
+class UserAdminDeleteView(generics.DestroyAPIView):     # user delete for admin
     queryset = User.objects.all()
     serializer_class = UserAdminDeleteSerializer
     permission_classes = [permissions.IsAdminUser]
@@ -78,7 +87,7 @@ class UserAdminDeleteView(generics.DestroyAPIView):
     def perform_destroy(self, instance):
         instance.delete()
 
-# Корзина
+# cart (add + list + delete)
         
 class CartView(APIView):
     permission_classes = (IsAuthenticated, )
@@ -122,7 +131,7 @@ class CartView(APIView):
         return Response(serializer.data)
     
 
-# Заказ    
+# order + cart clearing    
 class CartToOrderView(generics.CreateAPIView):
     queryset = Orders.objects.all()
     serializer_class = OrderSerializer

@@ -12,7 +12,7 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__'
 
-######## Для управления аккаунтом авторизированного user
+######## 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -25,17 +25,22 @@ class UserProfileSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
     
-#### Для управления продуктами (admin)
+#### 
 class ProductAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
 
-### Для удаления аккаунтов (admin)
+### 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username']        
+
 class UserAdminDeleteSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
 
-### Корзина + заказы
+### 
     
 class CartSerializer(serializers.ModelSerializer):
     class Meta:

@@ -22,7 +22,7 @@ class Product(models.Model):
         return self.name
     
 
-# # cart
+# cart
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     ordered = models.BooleanField(default=False)
@@ -30,9 +30,6 @@ class Cart(models.Model):
 
     def __str__(self):
         return f"{str(self.user.id)}. {str(self.user.username)} - {str(self.total_price)}$"
-
-         
-
 
 class CartItems(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE) 
@@ -48,14 +45,11 @@ class CartItems(models.Model):
     class Meta:
         verbose_name_plural = "CartItems"
         
-    
-
 @receiver(pre_save, sender=CartItems)
 def correct_price(sender, **kwargs):
     cart_items = kwargs['instance']
     price_of_product = Product.objects.get(id=cart_items.product.id)
     cart_items.price = cart_items.quantity * float(price_of_product.price)
-
 
 # orders    
 class Orders(models.Model):
